@@ -20,6 +20,19 @@ function ToastProvider({ children }) {
   const removeToast = React.useCallback((toastId) => {
     setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
   }, []);
+
+  React.useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setToasts([]);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
   const value = React.useMemo(
     () => ({ toasts, addToast, removeToast }),
     [toasts, addToast, removeToast]
