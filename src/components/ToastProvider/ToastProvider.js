@@ -1,4 +1,5 @@
 import React from "react";
+import useKey from "../../hooks/useKey";
 
 const ToastContext = React.createContext();
 
@@ -21,17 +22,7 @@ function ToastProvider({ children }) {
     setToasts((toasts) => toasts.filter((toast) => toast.id !== toastId));
   }, []);
 
-  React.useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") {
-        setToasts([]);
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
+  useKey("Escape", () => setToasts([]));
 
   const value = React.useMemo(
     () => ({ toasts, addToast, removeToast }),
